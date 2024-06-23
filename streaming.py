@@ -36,6 +36,7 @@ llm = OpenAI(
     model_name='gpt-4o',
     temperature=0,
     max_tokens=100,
+
     streaming=True,
     callbacks=[StreamingStdOutCallbackHandler()]
 )
