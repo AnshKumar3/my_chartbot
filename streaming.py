@@ -153,7 +153,7 @@ def main():
 
        # OpenAI API Key
        load_dotenv()
-       api_key = "sk-proj-md82nL5pR8yCbSIqTOmGT3BlbkFJMLi2rpc3qlb7a5h2NrHb"
+       api_key = "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"
 
        # Function to encode the image
        def encode_image(image_file):
