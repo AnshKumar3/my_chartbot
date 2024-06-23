@@ -1,3 +1,4 @@
+import os
 
 from openai import OpenAI
 import PyPDF2
@@ -153,7 +154,7 @@ def main():
 
        # OpenAI API Key
        load_dotenv()
-       api_key = "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"
+       api_key = os.environ['OPENAI_API_KEY']
 
        # Function to encode the image
        def encode_image(image_file):
