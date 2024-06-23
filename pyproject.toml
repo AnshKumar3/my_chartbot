@@ -1,0 +1,13 @@
+[tool.poetry]
+name = "summer-internship"
+version = "0.1.0"
+description = ""
+authors = ["Ansh"]
+readme = "README.md"
+packages = [{include = "evaluation"}]
+
+[tool.poetry.dependencies]
+python = ">=3.10.5,<3.12"
+groq = "^0.8.0"
+python-dotenv = "^1.0.1"
+openai = "^1.30.3"
