@@ -1,6 +1,4 @@
-import base64
-import re
-from tkinter import filedialog
+
 from openai import OpenAI
 import PyPDF2
 import streamlit as st
@@ -13,12 +11,7 @@ from dotenv import load_dotenv
 from langchain.chains.question_answering import load_qa_chain
 from langchain.evaluation import load_evaluator, EvaluatorType
 from langchain.memory import ConversationBufferMemory
-import time
 
-import tempfile
-
-
-import openai
 from langchain_community.chat_models import ChatOpenAI
 from langchain_community.document_loaders import PyPDFLoader
 from langchain_community.embeddings import OpenAIEmbeddings
