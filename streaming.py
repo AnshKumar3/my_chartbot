@@ -174,7 +174,7 @@ def main():
 
        headers = {
            "Content-Type": "application/json",
-           "Authorization": st.secrets["auth_token"]
+           "Authorization": st.secrets["api_key"]
        }
 
        payload = {
