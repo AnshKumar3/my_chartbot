@@ -78,7 +78,7 @@ if option=='Chat':
        message_placeholder.info(full_response)
        st.session_state.messages.append(AIMessage(content=part.content))
 
- elif option == 'Student Evaluation':
+elif option == 'Student Evaluation':
        subject = st.selectbox('Select Subject:', ['Essay-Writing'])
        uploaded_file = st.file_uploader("Choose a PDF file", type="pdf")
        if uploaded_file:
@@ -148,7 +148,7 @@ if option=='Chat':
              time.sleep(0.005)
              messag.info(full_strea)
 
- elif option=='Essay-Writing-handwritten':
+elif option=='Essay-Writing-handwritten':
        uploaded_file = st.file_uploader("Choose a handwritten file", type="jpg")
        ##uploaded_file=str(uploaded_file)
        ##temp_path =  re.search(r"/(\w+)/\w+-\w+-\w+-\w+-\w+", uploaded_file,re.IGNORECASE)
