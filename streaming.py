@@ -208,7 +208,7 @@ def main():
 
        # Parse the JSON
        response_dict = json.loads(response_json)
-       st.write(response_dict)
+
        # Extract the content from the assistant's message
        content = response_dict["choices"][0]["message"]["content"]
 
