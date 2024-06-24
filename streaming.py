@@ -176,7 +176,7 @@ def main():
 
        headers = {
            "Content-Type": "application/json",
-           "Authorization": f"Bearer {api_key}"}
+           "authorization": f"Bearer{api_key}"}
 
        payload = {
            "model": "gpt-4o",
