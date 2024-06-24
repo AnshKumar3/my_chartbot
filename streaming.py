@@ -1,7 +1,8 @@
 import base64
 import os
 import re
-
+import base64
+import requests
 from openai import OpenAI
 import PyPDF2
 import streamlit as st
@@ -149,21 +150,9 @@ def main():
              messag.info(full_strea)
 
  elif option=='Essay-Writing-handwritten':
-
-       uploaded_file = st.file_uploader("Choose a handwritten file", type="jpg")
-       if uploaded_file:
-         ##uploaded_file=str(uploaded_file)
-         ##temp_path =  re.search(r"/(\w+)/\w+-\w+-\w+-\w+-\w+", uploaded_file,re.IGNORECASE)
-         ##file_id = temp_path.group(0)
-         ##st.write(file_id)
-
-         import base64
-        import requests
-
-        # OpenAI API Key
+    uploaded_file = st.file_uploader("Choose a handwritten file", type="jpg")
+    if uploaded_file:
         os.environ["OPENAI_API_KEY"] == st.secrets["OPENAI_API_KEY"],
-       # Function to encode the image
-
         def encode_image(image_file):
            return base64.b64encode(image_file.read()).decode('utf-8')
 
