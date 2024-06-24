@@ -162,7 +162,7 @@ def main():
        import requests
 
        # OpenAI API Key
-       os.environ["OPENAI_API_KEY"] == st.secrets["OPEN_API_KEY"],
+       os.environ["OPENAI_API_KEY"] == st.secrets["OPENAI_API_KEY"],
 
        # Function to encode the image
        def encode_image(image_file):
