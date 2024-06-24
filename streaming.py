@@ -29,7 +29,7 @@ from langchain.callbacks.streaming_stdout import StreamingStdOutCallbackHandler
 from langchain_text_splitters import CharacterTextSplitter
 
 # Load environment variables
-
+load_dotenv()
 
 def read_pdf(file):
     pdf_reader = PyPDF2.PdfReader(file)
@@ -158,7 +158,9 @@ def main():
        import base64
        import requests
 
-
+       # OpenAI API Key
+       load_dotenv()
+       api=os.getenv("OPENAI_API_KEY")
 
        # Function to encode the image
        def encode_image(image_file):
