@@ -30,8 +30,8 @@ from langchain_text_splitters import CharacterTextSplitter
 
 # Load environment variables
 load_dotenv()
-
-def read_pdf(file):
+def main():
+ def read_pdf(file):
     pdf_reader = PyPDF2.PdfReader(file)
     num_pages = len(pdf_reader.pages)
     content = ""
@@ -40,10 +40,10 @@ def read_pdf(file):
     return content
 
 
-os.environ["OPENAI_API_KEY"] == st.secrets["OPENAI_API_KEY"],
+ os.environ["OPENAI_API_KEY"] == st.secrets["OPENAI_API_KEY"],
 
 # Initialize the OpenAI model with streaming enabled
-llm = OpenAI(
+ llm = OpenAI(
     model_name='gpt-4o',
     temperature=0,
     max_tokens=100,
@@ -52,13 +52,13 @@ llm = OpenAI(
 )
 
 # Initialize the conversation memory
-memory = ConversationBufferMemory()
+ memory = ConversationBufferMemory()
 
 # Streamlit app layout
-st.title('My Chatbot')
+ st.title('My Chatbot')
 
-option = st.selectbox('Choose an option:', ['Chat', 'Student Evaluation','Essay-Writing-handwritten'])
-if option=='Chat':
+ option = st.selectbox('Choose an option:', ['Chat', 'Student Evaluation','Essay-Writing-handwritten'])
+ if option=='Chat':
      with st.form(key='my_form'):
        user_input = st.text_input("Enter your input")
        submit_button = st.form_submit_button(label='Submit')
@@ -78,7 +78,7 @@ if option=='Chat':
        message_placeholder.info(full_response)
        st.session_state.messages.append(AIMessage(content=part.content))
 
-elif option == 'Student Evaluation':
+ elif option == 'Student Evaluation':
        subject = st.selectbox('Select Subject:', ['Essay-Writing'])
        uploaded_file = st.file_uploader("Choose a PDF file", type="pdf")
        if uploaded_file:
@@ -148,7 +148,7 @@ elif option == 'Student Evaluation':
              time.sleep(0.005)
              messag.info(full_strea)
 
-elif option=='Essay-Writing-handwritten':
+ elif option=='Essay-Writing-handwritten':
        uploaded_file = st.file_uploader("Choose a handwritten file", type="jpg")
        ##uploaded_file=str(uploaded_file)
        ##temp_path =  re.search(r"/(\w+)/\w+-\w+-\w+-\w+-\w+", uploaded_file,re.IGNORECASE)
@@ -230,5 +230,5 @@ import sys
 
 # Run the main function
 if __name__ == '__main__':
-    main()
+ main()
 
