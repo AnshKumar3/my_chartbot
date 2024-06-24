@@ -1,7 +1,7 @@
 import base64
 import os
 import re
-
+from tkinter import filedialog
 from openai import OpenAI
 import PyPDF2
 import streamlit as st
@@ -38,6 +38,9 @@ def read_pdf(file):
     for page_num in range(num_pages):
         content += pdf_reader.pages[page_num].extract_text()
     return content
+
+
+os.environ["OPENAI_API_KEY"] == st.secrets["OPENAI_API_KEY"],
 
 # Initialize the OpenAI model with streaming enabled
 llm = OpenAI(
@@ -159,8 +162,7 @@ def main():
        import requests
 
        # OpenAI API Key
-       load_dotenv()
-
+       os.environ["OPENAI_API_KEY"] == st.secrets["OPEN_API_KEY"],
 
        # Function to encode the image
        def encode_image(image_file):
@@ -174,7 +176,7 @@ def main():
 
        headers = {
            "Content-Type": "application/json",
-           "Authorization": st.secrets["api_key"]
+           "Authorization": st.secrets["OPENAI_API_KEY"]
        }
 
        payload = {
@@ -209,7 +211,7 @@ def main():
 
        # Parse the JSON
        response_dict = json.loads(response_json)
-
+       st.write(response_dict)
        # Extract the content from the assistant's message
        content = response_dict["choices"][0]["message"]["content"]
 
