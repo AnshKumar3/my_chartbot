@@ -58,7 +58,8 @@ memory = ConversationBufferMemory()
 st.title('My Chatbot')
 
 # Define the main function
-def main():
+def main(OPENAI_API_KEY=st.secrets("API_KEY")):
+    return OPENAI_API_KEY
     # Initialize the chat model with the memory and streaming enabled
  option = st.selectbox('Choose an option:', ['Chat', 'Student Evaluation','Essay-Writing-handwritten'])
  if option=='Chat':
@@ -162,9 +163,9 @@ def main():
        import requests
 
        # OpenAI API Key
-       api_key = st.secrets["OPENAI_API_KEY"],
-
+       os.environ["OPENAI_API_KEY"] == st.secrets["OPENAI_API_KEY"],
        # Function to encode the image
+
        def encode_image(image_file):
            return base64.b64encode(image_file.read()).decode('utf-8')
 
@@ -176,7 +177,7 @@ def main():
 
        headers = {
            "Content-Type": "application/json",
-           "Authorization": "Bearer {api_key}"
+           "Authorization": os.environ["OPENAI_API_KEY"]
        }
 
        payload = {
