@@ -149,34 +149,36 @@ def main():
              messag.info(full_strea)
 
  elif option=='Essay-Writing-handwritten':
+
        uploaded_file = st.file_uploader("Choose a handwritten file", type="jpg")
-       ##uploaded_file=str(uploaded_file)
-       ##temp_path =  re.search(r"/(\w+)/\w+-\w+-\w+-\w+-\w+", uploaded_file,re.IGNORECASE)
-       ##file_id = temp_path.group(0)
-       ##st.write(file_id)
+       if uploaded_file:
+         ##uploaded_file=str(uploaded_file)
+         ##temp_path =  re.search(r"/(\w+)/\w+-\w+-\w+-\w+-\w+", uploaded_file,re.IGNORECASE)
+         ##file_id = temp_path.group(0)
+         ##st.write(file_id)
 
-       import base64
-       import requests
+         import base64
+        import requests
 
-       # OpenAI API Key
-       os.environ["OPENAI_API_KEY"] == st.secrets["OPENAI_API_KEY"],
+        # OpenAI API Key
+        os.environ["OPENAI_API_KEY"] == st.secrets["OPENAI_API_KEY"],
        # Function to encode the image
 
-       def encode_image(image_file):
+        def encode_image(image_file):
            return base64.b64encode(image_file.read()).decode('utf-8')
 
        # Path to your image
-       image_path = uploaded_file
+        image_path = uploaded_file
 
        # Getting the base64 string
-       base64_image = encode_image(image_path)
+        base64_image = encode_image(image_path)
 
-       headers = {
+        headers = {
            "Content-Type": "application/json",
            "Authorization" : f"Bearer {st.secrets['API_KEY']}"
-       }
+        }
 
-       payload = {
+        payload = {
            "model": "gpt-4o",
            "messages": [
                {
@@ -196,29 +198,29 @@ def main():
                }
            ],
            "max_tokens": 300
-       }
+        }
 
-       response = requests.post("https://api.openai.com/v1/chat/completions", headers=headers, json=payload)
+        response = requests.post("https://api.openai.com/v1/chat/completions", headers=headers, json=payload)
 
-       ans=response.content
-       import json
+        ans=response.content
+        import json
 
        # The provided JSON response
-       response_json = ans  # Replace with the actual JSON data
+        response_json = ans  # Replace with the actual JSON data
 
        # Parse the JSON
-       response_dict = json.loads(response_json)
+        response_dict = json.loads(response_json)
 
        # Extract the content from the assistant's message
-       content = response_dict["choices"][0]["message"]["content"]
+        content = response_dict["choices"][0]["message"]["content"]
 
        # Remove escape characters (e.g., '\\n' becomes '\n')
-       content_cleaned = content.replace("\\n", "\n")
+        content_cleaned = content.replace("\\n", "\n")
 
-       answer=content_cleaned
-       messages = st.empty()
-       full_answer=""
-       for word in answer:
+        answer=content_cleaned
+        messages = st.empty()
+        full_answer=""
+        for word in answer:
            full_answer=full_answer+word
            time.sleep(0.005)
            messages.info(full_answer)
