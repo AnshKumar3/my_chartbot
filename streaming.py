@@ -1,7 +1,7 @@
 import base64
 import os
 import re
-from tkinter import filedialog
+
 from openai import OpenAI
 import PyPDF2
 import streamlit as st
