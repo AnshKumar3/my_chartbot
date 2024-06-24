@@ -1,5 +1,7 @@
+import base64
 import os
-
+import re
+from tkinter import filedialog
 from openai import OpenAI
 import PyPDF2
 import streamlit as st
@@ -12,7 +14,12 @@ from dotenv import load_dotenv
 from langchain.chains.question_answering import load_qa_chain
 from langchain.evaluation import load_evaluator, EvaluatorType
 from langchain.memory import ConversationBufferMemory
+import time
 
+import tempfile
+
+
+import openai
 from langchain_community.chat_models import ChatOpenAI
 from langchain_community.document_loaders import PyPDFLoader
 from langchain_community.embeddings import OpenAIEmbeddings
@@ -37,7 +44,6 @@ llm = OpenAI(
     model_name='gpt-4o',
     temperature=0,
     max_tokens=100,
-
     streaming=True,
     callbacks=[StreamingStdOutCallbackHandler()]
 )
@@ -154,7 +160,7 @@ def main():
 
        # OpenAI API Key
        load_dotenv()
-       api_key = os.environ['OPENAI_API_KEY']
+       api=os.getenv("OPENAI_API_KEY")
 
        # Function to encode the image
        def encode_image(image_file):
@@ -168,7 +174,7 @@ def main():
 
        headers = {
            "Content-Type": "application/json",
-           "Authorization": f"Bearer {api_key}"
+           "Authorization": f"Bearer {api}"
        }
 
        payload = {
