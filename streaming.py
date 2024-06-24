@@ -173,7 +173,7 @@ def main():
 
        headers = {
            "Content-Type": "application/json",
-           "Authorization": os.environ["OPENAI_API_KEY"]
+           "Authorization" : f"Bearer {st.secrets['API_KEY']}"
        }
 
        payload = {
