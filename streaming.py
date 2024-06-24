@@ -57,12 +57,8 @@ memory = ConversationBufferMemory()
 # Streamlit app layout
 st.title('My Chatbot')
 
-# Define the main function
-def main(OPENAI_API_KEY=st.secrets("API_KEY")):
-    return OPENAI_API_KEY
-    # Initialize the chat model with the memory and streaming enabled
- option = st.selectbox('Choose an option:', ['Chat', 'Student Evaluation','Essay-Writing-handwritten'])
- if option=='Chat':
+option = st.selectbox('Choose an option:', ['Chat', 'Student Evaluation','Essay-Writing-handwritten'])
+if option=='Chat':
      with st.form(key='my_form'):
        user_input = st.text_input("Enter your input")
        submit_button = st.form_submit_button(label='Submit')
