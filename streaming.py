@@ -88,7 +88,23 @@ def main():
         message_placeholder.info(content)
         st.session_state.messages.append(AIMessage(content=content))
       except Exception as e:
-        st.error(f"OpenAI API call failed: {e}")
+        # Some OpenAI client versions may reject unexpected init kwargs (e.g., 'proxies').
+        # Fall back to direct REST call using requests if that happens.
+        err_text = str(e)
+        if "proxies" in err_text or "unexpected keyword argument" in err_text:
+          try:
+            headers = {"Authorization": f"Bearer {api_key}", "Content-Type": "application/json"}
+            payload = {"model": "gpt-4o", "messages": api_messages, "max_tokens": 500}
+            r = requests.post("https://api.openai.com/v1/chat/completions", headers=headers, json=payload, timeout=30)
+            r.raise_for_status()
+            resp = r.json()
+            content = resp["choices"][0]["message"]["content"]
+            message_placeholder.info(content)
+            st.session_state.messages.append(AIMessage(content=content))
+          except Exception as e2:
+            st.error(f"OpenAI REST fallback failed: {e2}")
+        else:
+          st.error(f"OpenAI API call failed: {e}")
     else:
       try:
         for part in chat.stream(st.session_state.messages):
