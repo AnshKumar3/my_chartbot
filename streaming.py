@@ -131,10 +131,7 @@ def main():
   elif option == 'Essay-Writing-handwritten':
     uploaded_file = st.file_uploader("Choose a handwritten file", type=["jpg", "jpeg", "png"])
     if uploaded_file:
-      if "OPENAI_API_KEY" in st.secrets:
-        api_key = st.secrets["OPENAI_API_KEY"]
-      else:
-        api_key = os.environ.get("OPENAI_API_KEY", "")
+      # use `api_key` derived earlier from environment or Streamlit secrets
 
       def encode_image(image_file):
         return base64.b64encode(image_file.read()).decode('utf-8')
