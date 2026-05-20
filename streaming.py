@@ -32,8 +32,16 @@ def main():
     return content
 
   # Set API key from Streamlit secrets if present
-  if "OPENAI_API_KEY" in st.secrets:
-    os.environ["OPENAI_API_KEY"] = st.secrets["OPENAI_API_KEY"]
+    # Derive API key from environment or Streamlit secrets (safe when secrets.toml is missing)
+    api_key = os.environ.get("OPENAI_API_KEY", "")
+    try:
+      if hasattr(st, "secrets"):
+        secret_val = st.secrets.get("OPENAI_API_KEY")
+        if secret_val:
+          api_key = secret_val
+    except FileNotFoundError:
+      # No Streamlit secrets file; keep using environment variable
+      pass
 
   # Initialize the conversation memory
   memory = ConversationBufferMemory()
@@ -49,7 +57,7 @@ def main():
       submit_button = st.form_submit_button(label='Submit')
 
     try:
-      chat = ChatOpenAI(temperature=0, openai_api_key=st.secrets["OPENAI_API_KEY"])
+        chat = ChatOpenAI(temperature=0, openai_api_key=api_key)
     except Exception as e:
       st.error(f"Failed to initialize ChatOpenAI: {e}")
       return
@@ -93,7 +101,7 @@ def main():
       embeddings = OpenAIEmbeddings()
       docsearch = FAISS.from_texts(texts, embeddings)
       try:
-        chain = load_qa_chain(ChatOpenAI(temperature=0, openai_api_key=OPEN), chain_type="stuff")
+          chain = load_qa_chain(ChatOpenAI(temperature=0, openai_api_key=api_key), chain_type="stuff")
       except Exception as e:
         st.error(f"Failed to initialize QA chain: {e}")
         return
