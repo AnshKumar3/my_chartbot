@@ -31,17 +31,16 @@ def main():
         content += text
     return content
 
-  # Set API key from Streamlit secrets if present
-    # Derive API key from environment or Streamlit secrets (safe when secrets.toml is missing)
-    api_key = os.environ.get("OPENAI_API_KEY", "")
-    try:
-      if hasattr(st, "secrets"):
-        secret_val = st.secrets.get("OPENAI_API_KEY")
-        if secret_val:
-          api_key = secret_val
-    except FileNotFoundError:
-      # No Streamlit secrets file; keep using environment variable
-      pass
+  # Derive API key from environment or Streamlit secrets (safe when secrets.toml is missing)
+  api_key = os.environ.get("OPENAI_API_KEY", "")
+  try:
+    if hasattr(st, "secrets"):
+      secret_val = st.secrets.get("OPENAI_API_KEY")
+      if secret_val:
+        api_key = secret_val
+  except FileNotFoundError:
+    # No Streamlit secrets file; keep using environment variable
+    pass
 
   # Initialize the conversation memory
   memory = ConversationBufferMemory()
