@@ -49,7 +49,7 @@ def main():
       submit_button = st.form_submit_button(label='Submit')
 
     try:
-      chat = ChatOpenAI(temperature=0, openai_api_key=api_key)
+      chat = ChatOpenAI(temperature=0, openai_api_key=st.secrets["OPENAI_API_KEY"])
     except Exception as e:
       st.error(f"Failed to initialize ChatOpenAI: {e}")
       return
@@ -93,7 +93,7 @@ def main():
       embeddings = OpenAIEmbeddings()
       docsearch = FAISS.from_texts(texts, embeddings)
       try:
-        chain = load_qa_chain(ChatOpenAI(temperature=0, openai_api_key=api_key), chain_type="stuff")
+        chain = load_qa_chain(ChatOpenAI(temperature=0, openai_api_key=OPEN), chain_type="stuff")
       except Exception as e:
         st.error(f"Failed to initialize QA chain: {e}")
         return
