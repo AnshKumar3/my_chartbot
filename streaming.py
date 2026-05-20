@@ -3,6 +3,7 @@ import os
 import requests
 import json
 import time
+import openai
 import streamlit as st
 from PyPDF2 import PdfReader
 from dotenv import load_dotenv
@@ -42,6 +43,10 @@ def main():
     # No Streamlit secrets file; keep using environment variable
     pass
 
+  # Configure openai python client for fallback usage
+  if api_key:
+    openai.api_key = api_key
+
   # Initialize the conversation memory
   memory = ConversationBufferMemory()
 
@@ -55,11 +60,13 @@ def main():
       user_input = st.text_input("Enter your input")
       submit_button = st.form_submit_button(label='Submit')
 
+    use_openai_fallback = False
     try:
-        chat = ChatOpenAI(temperature=0, openai_api_key=api_key)
+      chat = ChatOpenAI(temperature=0, openai_api_key=api_key)
     except Exception as e:
-      st.error(f"Failed to initialize ChatOpenAI: {e}")
-      return
+      # Fall back to the openai python client if ChatOpenAI initialization fails
+      st.warning(f"ChatOpenAI init failed; falling back to OpenAI client: {e}")
+      use_openai_fallback = True
     full_response = ""
     message_placeholder = st.empty()
     if "messages" not in st.session_state:
@@ -67,20 +74,35 @@ def main():
     if submit_button and user_input:
       st.session_state.messages.append(HumanMessage(content=user_input))
     # Stream responses if the model supports it
-    try:
-      for part in chat.stream(st.session_state.messages):
-        stream = getattr(part, "content", "")
-        if stream == " ":
-          full_response += " "
-        full_response = full_response + stream
-        time.sleep(0.05)
-        message_placeholder.info(full_response)
-        st.session_state.messages.append(AIMessage(content=stream))
-    except Exception:
-      # Fallback: single response
-      resp = chat(st.session_state.messages)
-      message_placeholder.info(resp.content)
-      st.session_state.messages.append(AIMessage(content=resp.content))
+    if use_openai_fallback:
+      # Build messages list for the OpenAI API
+      api_messages = []
+      for m in st.session_state.messages:
+        role = "system" if isinstance(m, SystemMessage) else ("user" if isinstance(m, HumanMessage) else "assistant")
+        api_messages.append({"role": role, "content": m.content})
+
+      try:
+        resp = openai.ChatCompletion.create(model="gpt-4o", messages=api_messages, max_tokens=500)
+        content = resp["choices"][0]["message"]["content"]
+        message_placeholder.info(content)
+        st.session_state.messages.append(AIMessage(content=content))
+      except Exception as e:
+        st.error(f"OpenAI API call failed: {e}")
+    else:
+      try:
+        for part in chat.stream(st.session_state.messages):
+          stream = getattr(part, "content", "")
+          if stream == " ":
+            full_response += " "
+          full_response = full_response + stream
+          time.sleep(0.05)
+          message_placeholder.info(full_response)
+          st.session_state.messages.append(AIMessage(content=stream))
+      except Exception:
+        # Fallback: single response
+        resp = chat(st.session_state.messages)
+        message_placeholder.info(resp.content)
+        st.session_state.messages.append(AIMessage(content=resp.content))
 
   elif option == 'Student Evaluation':
     subject = st.selectbox('Select Subject:', ['Essay-Writing'])
