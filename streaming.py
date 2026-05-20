@@ -48,7 +48,11 @@ def main():
       user_input = st.text_input("Enter your input")
       submit_button = st.form_submit_button(label='Submit')
 
-    chat = ChatOpenAI(temperature=0)
+    try:
+      chat = ChatOpenAI(temperature=0, openai_api_key=api_key)
+    except Exception as e:
+      st.error(f"Failed to initialize ChatOpenAI: {e}")
+      return
     full_response = ""
     message_placeholder = st.empty()
     if "messages" not in st.session_state:
@@ -88,7 +92,11 @@ def main():
       full_stream = "\nTHESIS CLARITY :  \n"
       embeddings = OpenAIEmbeddings()
       docsearch = FAISS.from_texts(texts, embeddings)
-      chain = load_qa_chain(ChatOpenAI(temperature=0), chain_type="stuff")
+      try:
+        chain = load_qa_chain(ChatOpenAI(temperature=0, openai_api_key=api_key), chain_type="stuff")
+      except Exception as e:
+        st.error(f"Failed to initialize QA chain: {e}")
+        return
       query = (
         "evaluate the given message, Evaluation criteria: 1. Thesis clarity: Clear and focused thesis statement that addresses the essay prompt"
         " 2. Analysis Depth: In-depth analysis of the topic with supporting evidence 3. Organization: Well structured and logically organized essay"
