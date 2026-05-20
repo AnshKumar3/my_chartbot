@@ -82,7 +82,8 @@ def main():
         api_messages.append({"role": role, "content": m.content})
 
       try:
-        resp = openai.ChatCompletion.create(model="gpt-4o", messages=api_messages, max_tokens=500)
+        client = openai.OpenAI(api_key=api_key)
+        resp = client.chat.completions.create(model="gpt-4o", messages=api_messages, max_tokens=500)
         content = resp["choices"][0]["message"]["content"]
         message_placeholder.info(content)
         st.session_state.messages.append(AIMessage(content=content))
